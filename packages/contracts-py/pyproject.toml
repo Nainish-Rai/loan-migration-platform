@@ -1,0 +1,17 @@
+# Python code generated from contracts/proto, shared by the Python workers.
+[project]
+name = "lmp-contracts"
+version = "0.0.0"
+description = "Python code generated from contracts/proto, shared by the Python workers."
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "protobuf>=7.36,<8",
+  "grpcio>=1.85,<2",
+]
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "lmp_contracts"

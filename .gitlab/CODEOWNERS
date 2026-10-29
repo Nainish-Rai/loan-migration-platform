@@ -1,0 +1,30 @@
+# Who must approve what. GitLab requires one approval from every section that owns a changed file,
+# so policies/ needs both security and compliance. Group names are placeholders until the bank
+# names its owners (docs/DESIGN-CODE-ARCHITECTURE-PLAN.md).
+
+[Platform]
+* @lmp/platform
+
+[Enforcement]
+/services/gate/ @lmp/enforcement
+/services/ledger/ @lmp/enforcement
+/services/broker/ @lmp/enforcement
+/services/guard/ @lmp/enforcement
+/contracts/proto/lmp/ledger/ @lmp/enforcement
+/contracts/proto/lmp/broker/ @lmp/enforcement
+
+[Security]
+/services/gate/ @lmp/security
+/services/ledger/ @lmp/security
+/services/broker/ @lmp/security
+/services/guard/ @lmp/security
+/services/sanitizer/ @lmp/security
+/policies/ @lmp/security
+/deploy/ @lmp/security
+
+[Compliance]
+/policies/ @lmp/compliance
+/jobs/verify/ @lmp/compliance
+
+[Migration lead]
+/services/cutover/ @lmp/migration-lead

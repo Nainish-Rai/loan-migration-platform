@@ -1,0 +1,1 @@
+-- mapping_specs (insert-only versions), candidates, review_tasks, gold_mappings, outbox and inbox.

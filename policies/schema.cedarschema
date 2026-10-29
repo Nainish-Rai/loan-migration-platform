@@ -1,0 +1,2 @@
+// Entity types (Engineer, Run, Agent, Tool, Table, Field, Bucket) and actions (read, propose,
+// check, call_model, write_staging). No action an agent can hold writes production.

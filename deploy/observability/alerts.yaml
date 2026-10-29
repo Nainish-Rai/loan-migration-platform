@@ -1,0 +1,2 @@
+# Alerts that page: gate failing closed, ledger chain mismatch, missing checkpoint, any grant
+# without a receipt (must be zero), Kafka lag over 10 minutes.

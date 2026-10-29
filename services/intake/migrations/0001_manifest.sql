@@ -1,0 +1,1 @@
+-- snapshots, landed_objects (SHA-256 primary key), quarantine, outbox and inbox tables.

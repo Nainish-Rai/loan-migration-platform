@@ -1,0 +1,2 @@
+# Backends: Claude on Bedrock over PrivateLink where the bank allows it, and vLLM in the cluster
+# for Qwen3, olmOCR and BGE-M3.

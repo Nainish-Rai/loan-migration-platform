@@ -1,0 +1,37 @@
+{
+  "name": "loan-migration-platform",
+  "private": true,
+  "type": "module",
+  "description": "Design shell for a platform that moves a bank's legacy loan book into a new platform, with AI agents behind one gate.",
+  "packageManager": "pnpm@12.16.1",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "build": "nx run-many -t build",
+    "test": "nx affected -t test",
+    "lint": "biome check . && nx affected -t lint",
+    "arch": "depcruise services packages --config .dependency-cruiser.cjs",
+    "contracts": "buf lint && buf breaking --against '.git#branch=main'",
+    "ci": "pnpm lint && pnpm arch && pnpm contracts && nx affected -t build test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "@bufbuild/buf": "catalog:",
+    "@bufbuild/protoc-gen-es": "catalog:",
+    "@fast-check/vitest": "catalog:",
+    "@nx/eslint-plugin": "catalog:",
+    "@swc/core": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "dependency-cruiser": "catalog:",
+    "eslint": "catalog:",
+    "fast-check": "catalog:",
+    "nx": "catalog:",
+    "toxiproxy-node-client": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "unplugin-swc": "catalog:",
+    "vitest": "catalog:"
+  }
+}

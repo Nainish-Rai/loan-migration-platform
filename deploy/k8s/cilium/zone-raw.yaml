@@ -1,0 +1,2 @@
+# Default deny. Raw services reach the legacy replica, the raw bucket, Kafka, Temporal and
+# OpenBao. Nothing in another zone reaches them, except Temporal's worker traffic.

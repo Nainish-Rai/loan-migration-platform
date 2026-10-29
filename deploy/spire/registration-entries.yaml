@@ -1,0 +1,2 @@
+# SPIFFE ids per service (spiffe://<bank domain>/ns/<zone>/sa/<service>) and per run for agent
+# pods, so the gate sees which run is asking.

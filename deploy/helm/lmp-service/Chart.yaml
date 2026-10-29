@@ -1,0 +1,6 @@
+# One chart for every service. The umbrella chart instantiates it once per service with an alias.
+apiVersion: v2
+name: lmp-service
+description: A loan-migration-platform service with its zone's network policy, identity and hardening.
+type: application
+version: 0.1.0

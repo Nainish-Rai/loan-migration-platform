@@ -1,0 +1,114 @@
+# pnpm workspace and catalog: one version of every dependency, for every package.
+# A package.json says `catalog:`, never a range, so two services can't drift apart.
+#
+# Versions checked against the npm registry on 2026-10-29. Each floor is the newest release that
+# is at least a week old: minimumReleaseAge refuses anything younger, and pnpm picks newer
+# releases as they age. Renovate raises the floors (renovate.json5).
+packages:
+  - "services/*"
+  - "packages/*"
+  - "tests"
+
+# Supply chain: installs come from the bank's mirror, and only these packages may run install scripts.
+catalogMode: strict
+minimumReleaseAge: 10080 # minutes: a new release waits a week
+trustPolicy: no-downgrade # refuse a release with weaker provenance than the one before it
+# Releases older than a year skip that check: many predate provenance (chokidar 4.0.3, under
+# @asyncapi/cli, is pnpm's own example). Anything newer that loses provenance still fails the install.
+trustPolicyIgnoreAfter: 525600 # minutes
+# Every install script is decided here; pnpm stops the install on any script nobody has reviewed.
+allowBuilds:
+  "@confluentinc/kafka-javascript": true # fetches librdkafka; the prebuilt binary is mirrored for the air gap
+  "@bufbuild/buf": true # links the platform binary
+  "@swc/core": true
+  nx: true
+  "@scarf/scarf": false # install-time analytics, pulled in by swagger-ui-dist and Pact
+  cpu-features: false # optional native speed-up for ssh2; Testcontainers doesn't need it
+  ssh2: false # the same: Docker is reached over its socket, not SSH
+  protobufjs: false # its script only checks for optional CLI dependencies
+
+catalog:
+  # Framework and runtime
+  "@nestjs/common": "^12.2.0"
+  "@nestjs/core": "^12.2.0"
+  "@nestjs/platform-fastify": "^12.2.0"
+  "@nestjs/swagger": "^12.0.3"
+  "@nestjs/testing": "^12.2.0"
+  reflect-metadata: "^0.2.2"
+  rxjs: "^7.8.2"
+  fastify: "^5.12.7"
+  zod: "^4.6.7"
+  # Telemetry, logging and resilience
+  "@opentelemetry/api": "^1.10.0"
+  "@opentelemetry/sdk-node": "^0.300.0"
+  "@opentelemetry/auto-instrumentations-node": "^0.82.0"
+  pino: "^10.4.0"
+  pino-http: "^11.0.0"
+  nestjs-pino: "^5.3.1"
+  cockatiel: "^4.0.0"
+  undici: "^8.12.3"
+  # Contracts
+  "@bufbuild/protobuf": "^2.16.0"
+  "@connectrpc/connect": "^2.2.0"
+  "@connectrpc/connect-fastify": "^2.2.0"
+  "@connectrpc/connect-node": "^2.2.0"
+  # Data
+  kysely: "^0.29.7"
+  pg: "^8.23.1"
+  pg-copy-streams: "^7.0.0"
+  node-pg-migrate: "^9.0.0"
+  neo4j-driver: "^6.2.0"
+  "@duckdb/node-api": "1.5.6-r.2" # pinned: 2.0 shipped this month (TD-8)
+  "@aws-sdk/client-s3": "^3.1155.0"
+  "@aws-sdk/lib-storage": "^3.1155.0"
+  "@aws-sdk/client-rds": "^3.1155.0"
+  "@aws-sdk/client-kms": "^3.1155.0"
+  # Messaging and workflow
+  "@confluentinc/kafka-javascript": "^1.11.0"
+  "@confluentinc/schemaregistry": "^1.11.0"
+  "@temporalio/activity": "^1.24.0"
+  "@temporalio/client": "^1.24.0"
+  "@temporalio/worker": "^1.24.0"
+  "@temporalio/workflow": "^1.24.0"
+  "@temporalio/testing": "^1.24.0"
+  "@temporalio/vercel-ai-sdk": "^1.0.0" # release stage checked before production (TD-7)
+  # Identity and policy
+  "@cedar-policy/cedar-wasm": "^4.14.0"
+  "@cedar-policy/mcp-schema-generator-wasm": "^0.7.0"
+  jose: "^6.2.13"
+  node-vault: "^0.13.0"
+  sigstore: "^5.0.0"
+  # Agents
+  ai: "^7.0.148"
+  "@ai-sdk/openai-compatible": "^3.0.75"
+  "@modelcontextprotocol/client": "^2.3.1"
+  "@modelcontextprotocol/server": "^2.3.1"
+  # Integrations
+  antlr4ng: "^3.0.16"
+  unleash-client: "^6.12.2"
+  # Build, test and lint
+  typescript: "~6.0.3" # 6.x until typescript-eslint runs on 7 (TD-6)
+  "@types/node": "^24.10.0"
+  "@types/pg": "^8.15.0"
+  "@types/pg-copy-streams": "^1.2.5"
+  "@swc/core": "^1.16.20"
+  unplugin-swc: "^2.0.0"
+  nx: "^24.0.0"
+  "@nx/eslint-plugin": "^24.0.0"
+  "@bufbuild/buf": "^1.75.0"
+  "@bufbuild/protoc-gen-es": "^2.16.0"
+  antlr-ng: "^1.0.10"
+  vitest: "^5.0.5"
+  "@vitest/coverage-v8": "^5.0.5"
+  fast-check: "^4.10.2"
+  "@fast-check/vitest": "^0.5.0"
+  testcontainers: "^12.2.1"
+  "@testcontainers/kafka": "^12.2.1"
+  "@testcontainers/neo4j": "^12.2.1"
+  "@testcontainers/postgresql": "^12.2.1"
+  "@pact-foundation/pact": "^17.1.4"
+  toxiproxy-node-client: "^4.1.0"
+  "@biomejs/biome": "2.6.2" # exact: a minor release can change the formatting
+  eslint: "^10.13.0"
+  typescript-eslint: "^8.72.0"
+  dependency-cruiser: "^18.7.0"

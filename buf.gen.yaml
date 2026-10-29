@@ -1,0 +1,16 @@
+# Code generation for TypeScript. Plugins run locally from node_modules, so it works offline.
+# Python stubs come from tools/scripts/gen-python-stubs.sh (grpcio-tools on the internal PyPI mirror).
+version: v2
+clean: true
+inputs:
+  - directory: contracts/proto
+  - module: buf.build/envoyproxy/envoy
+    paths:
+      - envoy/service/auth/v3
+plugins:
+  - local: protoc-gen-es
+    out: packages/contracts/src/gen
+    include_imports: true
+    opt:
+      - target=ts
+      - import_extension=js

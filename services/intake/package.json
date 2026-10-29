@@ -1,0 +1,60 @@
+{
+  "name": "@lmp/intake",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reads the legacy sources read-only, at one point in time, and lands every byte once under its hash.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js",
+    "migrate": "node-pg-migrate up --migrations-dir migrations"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@aws-sdk/client-s3": "catalog:",
+    "@aws-sdk/lib-storage": "catalog:",
+    "@confluentinc/kafka-javascript": "catalog:",
+    "@confluentinc/schemaregistry": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@nestjs/swagger": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@temporalio/activity": "catalog:",
+    "@temporalio/client": "catalog:",
+    "@temporalio/worker": "catalog:",
+    "@temporalio/workflow": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "kysely": "catalog:",
+    "node-pg-migrate": "catalog:",
+    "pg": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "undici": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@pact-foundation/pact": "catalog:",
+    "@temporalio/testing": "catalog:",
+    "@testcontainers/kafka": "catalog:",
+    "@testcontainers/postgresql": "catalog:",
+    "@types/pg": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:raw",
+      "lang:ts"
+    ]
+  }
+}

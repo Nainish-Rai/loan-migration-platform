@@ -1,0 +1,2 @@
+# The agent-sandbox template: gVisor, no service-account token, a read-only root filesystem, Envoy
+# as the only egress.

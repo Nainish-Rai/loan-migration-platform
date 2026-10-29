@@ -1,0 +1,32 @@
+{
+  "name": "@lmp/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generated protobuf types, event types and Temporal activity interfaces. Imported only by adapters.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./activities": {
+      "types": "./dist/activities/index.d.ts",
+      "default": "./dist/activities/index.js"
+    }
+  },
+  "scripts": {
+    "generate": "buf generate",
+    "build": "buf generate && tsc --build",
+    "lint": "eslint src --ignore-pattern src/gen"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@bufbuild/protobuf": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:contracts",
+      "lang:ts"
+    ]
+  }
+}

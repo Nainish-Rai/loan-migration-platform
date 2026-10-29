@@ -1,0 +1,2 @@
+# One namespace per zone: lmp-raw, lmp-masked, lmp-gate, lmp-control, lmp-prod, each labelled with
+# its zone.

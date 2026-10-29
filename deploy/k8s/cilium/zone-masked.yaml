@@ -1,0 +1,2 @@
+# Default deny. Agent pods reach only their Envoy sidecar; knowledge and docai reach their own
+# stores, Kafka and Temporal.

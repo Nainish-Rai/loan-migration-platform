@@ -1,0 +1,57 @@
+{
+  "name": "@lmp/ledger",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Keeps the decision log: append-only, hash-chained, durable on a synchronous standby before it answers, checkpointed to WORM storage.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js",
+    "migrate": "node-pg-migrate up --migrations-dir migrations"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@aws-sdk/client-kms": "catalog:",
+    "@aws-sdk/client-s3": "catalog:",
+    "@aws-sdk/lib-storage": "catalog:",
+    "@bufbuild/protobuf": "catalog:",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-fastify": "catalog:",
+    "@connectrpc/connect-node": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@nestjs/swagger": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "kysely": "catalog:",
+    "node-pg-migrate": "catalog:",
+    "node-vault": "catalog:",
+    "pg": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@pact-foundation/pact": "catalog:",
+    "@testcontainers/postgresql": "catalog:",
+    "@types/pg": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:gate",
+      "lang:ts"
+    ]
+  }
+}

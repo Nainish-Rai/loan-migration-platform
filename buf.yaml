@@ -1,0 +1,14 @@
+# Buf workspace: our protobuf contracts plus Envoy's, which the gate implements.
+# Lint and breaking-change checks run on every merge request (`pnpm contracts`).
+version: v2
+modules:
+  - path: contracts/proto
+deps:
+  # ext_authz and ext_proc. Pinned in buf.lock; mirrored for the air gap with `buf export`.
+  - buf.build/envoyproxy/envoy
+lint:
+  use:
+    - STANDARD
+breaking:
+  use:
+    - FILE

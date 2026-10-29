@@ -1,0 +1,41 @@
+{
+  "name": "@lmp/agents",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Runs five narrow agents as Temporal activities in a gVisor sandbox. Holds no credentials; every call leaves through Envoy.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@ai-sdk/openai-compatible": "catalog:",
+    "@modelcontextprotocol/client": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@temporalio/activity": "catalog:",
+    "@temporalio/client": "catalog:",
+    "@temporalio/vercel-ai-sdk": "catalog:",
+    "@temporalio/worker": "catalog:",
+    "@temporalio/workflow": "catalog:",
+    "ai": "catalog:",
+    "pino": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@temporalio/testing": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:masked",
+      "lang:ts"
+    ]
+  }
+}

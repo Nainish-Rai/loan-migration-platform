@@ -1,0 +1,2 @@
+# Default deny. Only Envoy sidecars reach the gate and guard; only the gate reaches the ledger's
+# Append; tool services reach the broker.

@@ -1,0 +1,2 @@
+# The OpenTelemetry Collector: receives OTLP, scrubs identity numbers, exports to the bank's own
+# backends.

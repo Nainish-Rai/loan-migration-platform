@@ -1,0 +1,18 @@
+# GitLab CI inside the bank. A shell: these comments are the stages, in order.
+# Every job runs on the internal runners with no internet access.
+#
+# install     pnpm fetch from the npm mirror, then `pnpm install --offline --frozen-lockfile`;
+#             `uv sync --frozen` from the PyPI mirror. Caches keyed on the lockfiles.
+# lint        biome check, then `nx affected -t lint` (typescript-eslint with Nx module boundaries,
+#             ruff and import-linter for the Python projects).
+# arch        `pnpm arch`: dependency-cruiser over services/ and packages/. Any error fails the pipeline.
+# contracts   buf lint and buf breaking against main; `asyncapi validate` and an AsyncAPI diff for every
+#             file in contracts/events, from the AsyncAPI CLI image in Harbor (kept out of the workspace,
+#             because its dependency tree is large and fails pnpm's trust policy).
+# policies    cedar validate against policies/schema.cedarschema, then every case in policies/tests.
+#             On main, the policy bundle is signed with cosign and pushed to Harbor.
+# test        `nx affected -t test`: unit tests, then integration tests with Testcontainers pulling
+#             images from Harbor.
+# build       One image per affected service. Syft writes the SBOM; cosign signs image and SBOM.
+# e2e         The tracer bullet on staging (tests/e2e/tracer-bullet), on every merge to main.
+# airgap      On a release tag: zarf package create from deploy/airgap/zarf.yaml, signed.

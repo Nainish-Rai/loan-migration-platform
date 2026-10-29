@@ -1,0 +1,1 @@
+# One Debezium Postgres connector per service database with the outbox event router.

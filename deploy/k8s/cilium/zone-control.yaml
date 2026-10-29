@@ -1,0 +1,2 @@
+# Default deny. Control services reach their own databases, Kafka, Temporal, the broker, GitLab
+# and the Spark Operator.

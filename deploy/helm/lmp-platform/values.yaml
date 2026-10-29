@@ -1,0 +1,62 @@
+# Per-service settings. The zone selects the namespace and the Cilium policy.
+intake:
+  zone: raw
+  image: intake
+  sandboxed: false
+sanitizer:
+  zone: raw
+  image: sanitizer
+  sandboxed: false
+docai:
+  zone: masked
+  image: docai
+  sandboxed: false
+knowledge:
+  zone: masked
+  image: knowledge
+  sandboxed: false
+agents:
+  zone: masked
+  image: agents
+  sandboxed: true
+gate:
+  zone: gate
+  image: gate
+  sandboxed: false
+ledger:
+  zone: gate
+  image: ledger
+  sandboxed: false
+broker:
+  zone: gate
+  image: broker
+  sandboxed: false
+guard:
+  zone: gate
+  image: guard
+  sandboxed: false
+runs:
+  zone: control
+  image: runs
+  sandboxed: false
+mapping:
+  zone: control
+  image: mapping
+  sandboxed: false
+staging:
+  zone: control
+  image: staging
+  sandboxed: false
+verification:
+  zone: control
+  image: verification
+  sandboxed: false
+release:
+  zone: control
+  image: release
+  sandboxed: false
+cutover:
+  zone: prod
+  image: cutover
+  sandboxed: false
+  enabled: false # after the pilot

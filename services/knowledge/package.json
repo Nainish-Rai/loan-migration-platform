@@ -1,0 +1,54 @@
+{
+  "name": "@lmp/knowledge",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Joins application, party, document, field and the line of legacy code that writes it into one graph, and serves evidence dossiers to agents.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js",
+    "migrate": "node-pg-migrate up --migrations-dir migrations"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@bufbuild/protobuf": "catalog:",
+    "@confluentinc/kafka-javascript": "catalog:",
+    "@confluentinc/schemaregistry": "catalog:",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-fastify": "catalog:",
+    "@connectrpc/connect-node": "catalog:",
+    "@modelcontextprotocol/server": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "antlr4ng": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "neo4j-driver": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@testcontainers/kafka": "catalog:",
+    "@testcontainers/neo4j": "catalog:",
+    "antlr-ng": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:masked",
+      "lang:ts"
+    ]
+  }
+}

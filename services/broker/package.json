@@ -1,0 +1,47 @@
+{
+  "name": "@lmp/broker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Trades a SPIFFE identity plus a ledger receipt for one credential, scoped to exactly what was decided, for at most 300 seconds.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@bufbuild/protobuf": "catalog:",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-fastify": "catalog:",
+    "@connectrpc/connect-node": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "jose": "catalog:",
+    "node-vault": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:gate",
+      "lang:ts"
+    ]
+  }
+}

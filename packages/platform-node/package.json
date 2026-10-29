@@ -1,0 +1,69 @@
+{
+  "name": "@lmp/platform-node",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Framework-free glue every TypeScript service shares: telemetry, logging, resilience, config, Postgres, Kafka, grants.",
+  "exports": {
+    "./telemetry": {
+      "types": "./dist/telemetry/index.d.ts",
+      "default": "./dist/telemetry/index.js"
+    },
+    "./logging": {
+      "types": "./dist/logging/index.d.ts",
+      "default": "./dist/logging/index.js"
+    },
+    "./resilience": {
+      "types": "./dist/resilience/index.d.ts",
+      "default": "./dist/resilience/index.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "default": "./dist/config/index.js"
+    },
+    "./postgres": {
+      "types": "./dist/postgres/index.d.ts",
+      "default": "./dist/postgres/index.js"
+    },
+    "./kafka": {
+      "types": "./dist/kafka/index.d.ts",
+      "default": "./dist/kafka/index.js"
+    },
+    "./grants": {
+      "types": "./dist/grants/index.d.ts",
+      "default": "./dist/grants/index.js"
+    },
+    "./spiffe": {
+      "types": "./dist/spiffe/index.d.ts",
+      "default": "./dist/spiffe/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@confluentinc/kafka-javascript": "catalog:",
+    "@confluentinc/schemaregistry": "catalog:",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-node": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@opentelemetry/auto-instrumentations-node": "catalog:",
+    "@opentelemetry/sdk-node": "catalog:",
+    "@temporalio/worker": "catalog:",
+    "cockatiel": "catalog:",
+    "kysely": "catalog:",
+    "pg": "catalog:",
+    "pino": "catalog:",
+    "zod": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:platform",
+      "lang:ts"
+    ]
+  }
+}

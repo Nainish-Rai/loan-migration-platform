@@ -1,0 +1,2 @@
+# The Deployment: hardened pod, SPIFFE helper sidecar, readiness on /health/ready, gVisor runtime
+# class and Envoy sidecar when sandboxed is true.

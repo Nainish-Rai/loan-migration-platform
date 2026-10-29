@@ -1,0 +1,38 @@
+{
+  "name": "@lmp/platform-nest",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "NestJS modules over platform-node: logging, tracing, health, auth, validation, Connect.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@lmp/platform-node": "workspace:*",
+    "@connectrpc/connect-fastify": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "fastify": "catalog:",
+    "jose": "catalog:",
+    "nestjs-pino": "catalog:",
+    "pino-http": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:platform",
+      "lang:ts"
+    ]
+  }
+}

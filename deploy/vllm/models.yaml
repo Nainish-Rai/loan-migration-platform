@@ -1,0 +1,2 @@
+# vLLM deployments on the GPU pool: Qwen3, olmOCR, BGE-M3. Weights come from the air-gap bundle,
+# verified by checksum.

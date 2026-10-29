@@ -1,0 +1,18 @@
+// One formatter for TypeScript, JSON, YAML and Markdown, plus fast lint. Type-aware rules live in
+// eslint.config.mjs.
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  // Helm templates are Go templates, not YAML, and pnpm owns its lockfile's layout.
+  "files": {
+    "includes": ["**", "!**/dist", "!**/src/gen", "!deploy/helm/*/templates", "!pnpm-lock.yaml"]
+  },
+  "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
+  "linter": { "enabled": true, "rules": { "preset": "recommended" } },
+  "javascript": {
+    "formatter": { "quoteStyle": "double", "trailingCommas": "all" },
+    // NestJS injects through constructor parameter decorators.
+    "parser": { "unsafeParameterDecoratorsEnabled": true }
+  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } }
+}

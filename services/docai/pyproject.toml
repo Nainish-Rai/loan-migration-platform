@@ -1,0 +1,45 @@
+# Splits bundles, classifies pages into one taxonomy and extracts fields with page-and-box citations. Disagreements become flagged gaps.
+[project]
+name = "lmp-docai"
+version = "0.0.0"
+description = "Splits bundles, classifies pages into one taxonomy and extracts fields with page-and-box citations. Disagreements become flagged gaps."
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "lmp-contracts",
+  "temporalio>=1.35,<2",
+  "pydantic>=2.14,<3",
+  "docling>=2.144,<3",
+  "pdfplumber>=0.11.10,<0.12",
+  "PyExifTool>=0.5.6,<0.6",
+  "pyiceberg>=0.12,<0.13",
+  "boto3>=1.43,<2",
+  "httpx>=0.28.1,<0.29",
+  "confluent-kafka>=2.16,<3",
+  "opentelemetry-sdk>=1.45.1,<2",
+]
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "docai"
+
+[tool.uv.sources]
+lmp-contracts = { workspace = true }
+
+# The four rings, checked in CI by `lint-imports`. Imports point inward; the core imports no SDK.
+[tool.importlinter]
+root_packages = ["docai"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Imports point inward"
+type = "layers"
+layers = ["docai.main", "docai.adapters", "docai.application", "docai.domain"]
+
+[[tool.importlinter.contracts]]
+name = "The core imports no SDK"
+type = "forbidden"
+source_modules = ["docai.domain", "docai.application"]
+forbidden_modules = ["temporalio", "docling", "pdfplumber", "exiftool", "pyiceberg", "boto3", "httpx", "confluent_kafka"]

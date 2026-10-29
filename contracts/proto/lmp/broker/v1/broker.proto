@@ -1,0 +1,2 @@
+// BrokerService: ExchangeForGrant(subject_token = JWT-SVID, actor_token = receipt, scope) returns
+// Grant with expires_at.

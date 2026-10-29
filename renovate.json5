@@ -1,0 +1,21 @@
+// Dependency updates, run inside the bank against the internal npm, PyPI and image mirrors.
+// A release waits a week before Renovate proposes it, the same delay pnpm enforces on install.
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+  minimumReleaseAge: "7 days",
+  rangeStrategy: "bump",
+  lockFileMaintenance: { enabled: true },
+  packageRules: [
+    { matchPackageNames: ["@nestjs/**"], groupName: "NestJS" },
+    { matchPackageNames: ["@temporalio/**"], groupName: "Temporal TypeScript SDK" },
+    { matchPackageNames: ["@opentelemetry/**"], groupName: "OpenTelemetry" },
+    { matchPackageNames: ["@aws-sdk/**"], groupName: "AWS SDK", schedule: ["before 6am on monday"] },
+    { matchPackageNames: ["@bufbuild/**", "@connectrpc/**"], groupName: "Buf and Connect" },
+    { matchPackageNames: ["@nx/**", "nx"], groupName: "Nx" },
+    { matchPackageNames: ["typescript"], allowedVersions: "<7", description: "TypeScript 7 waits for typescript-eslint (TD-6)" },
+    { matchPackageNames: ["@duckdb/node-api"], allowedVersions: "<2", description: "DuckDB 2 waits until it settles (TD-8)" },
+    { matchPackageNames: ["@cedar-policy/**"], labels: ["security-review"], description: "Policy engine changes need the security group" },
+    { matchManagers: ["pep621"], groupName: "Python workers" },
+  ],
+}

@@ -1,0 +1,57 @@
+// Solution file: `tsc --build` from the root builds every TypeScript project in dependency order.
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/shared-kernel"
+    },
+    {
+      "path": "packages/contracts"
+    },
+    {
+      "path": "packages/platform-node"
+    },
+    {
+      "path": "packages/platform-nest"
+    },
+    {
+      "path": "packages/testing"
+    },
+    {
+      "path": "services/intake"
+    },
+    {
+      "path": "services/knowledge"
+    },
+    {
+      "path": "services/agents"
+    },
+    {
+      "path": "services/gate"
+    },
+    {
+      "path": "services/ledger"
+    },
+    {
+      "path": "services/broker"
+    },
+    {
+      "path": "services/runs"
+    },
+    {
+      "path": "services/mapping"
+    },
+    {
+      "path": "services/staging"
+    },
+    {
+      "path": "services/verification"
+    },
+    {
+      "path": "services/release"
+    },
+    {
+      "path": "services/cutover"
+    }
+  ]
+}

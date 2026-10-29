@@ -1,0 +1,2 @@
+# The gVisor RuntimeClass agent pods run under: a user-space kernel between the agent and the
+# host.

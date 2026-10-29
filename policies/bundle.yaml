@@ -1,0 +1,2 @@
+# What goes into the signed bundle: schema, policies and version. CI signs it and pushes it to
+# Harbor as an OCI artifact.

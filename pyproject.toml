@@ -1,0 +1,22 @@
+# uv workspace for the Python services, the Spark jobs and the generated Python contracts.
+# Virtual root: no package here, only the workspace members, shared dev tools and their settings.
+[tool.uv.workspace]
+members = ["services/sanitizer", "services/docai", "services/guard", "packages/contracts-py", "jobs"]
+
+[dependency-groups]
+dev = ["pytest>=9.2,<10", "ruff>=0.17.3,<0.18", "import-linter>=2.15,<3", "grpcio-tools>=1.85,<2"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# S is bandit: no shell=True, no hard-coded secrets, no unsafe deserialisation.
+select = ["E", "F", "I", "B", "UP", "SIM", "S", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+markers = ["integration: needs containers from the internal registry"]

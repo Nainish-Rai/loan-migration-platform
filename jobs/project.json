@@ -1,0 +1,17 @@
+{
+  "name": "@lmp/jobs",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "jobs",
+  "tags": ["type:jobs", "lang:py"],
+  "targets": {
+    "lint": {
+      "command": "uv run ruff check jobs",
+      "cache": true
+    },
+    "test": {
+      "command": "uv run --package lmp-jobs pytest jobs/tests",
+      "cache": true
+    }
+  }
+}

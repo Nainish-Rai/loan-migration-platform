@@ -1,0 +1,56 @@
+{
+  "name": "@lmp/release",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Opens a merge request with spec, code, evidence and gaps; records approvals; refuses self-approval; needs two people on money fields.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js",
+    "migrate": "node-pg-migrate up --migrations-dir migrations"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@nestjs/swagger": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@temporalio/activity": "catalog:",
+    "@temporalio/client": "catalog:",
+    "@temporalio/worker": "catalog:",
+    "@temporalio/workflow": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "kysely": "catalog:",
+    "node-pg-migrate": "catalog:",
+    "pg": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "sigstore": "catalog:",
+    "undici": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@pact-foundation/pact": "catalog:",
+    "@temporalio/testing": "catalog:",
+    "@testcontainers/postgresql": "catalog:",
+    "@types/pg": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:control",
+      "lang:ts"
+    ]
+  }
+}

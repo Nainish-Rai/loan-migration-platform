@@ -1,0 +1,2 @@
+# The envelope every event shares: id, type, source, time, schema version, trace context.
+# Debezium's outbox router fills it from the outbox row.

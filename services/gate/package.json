@@ -1,0 +1,47 @@
+{
+  "name": "@lmp/gate",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Decides every agent action against default-deny Cedar policies, writes the decision to the ledger first, and fails closed.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@bufbuild/protobuf": "catalog:",
+    "@cedar-policy/cedar-wasm": "catalog:",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-fastify": "catalog:",
+    "@connectrpc/connect-node": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "sigstore": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:gate",
+      "lang:ts"
+    ]
+  }
+}

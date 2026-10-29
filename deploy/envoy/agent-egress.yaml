@@ -1,0 +1,8 @@
+# The agent pod's Envoy sidecar, its only way out. Filters in order: ext_authz to the gate over
+# gRPC (timeout 250 ms, failure_mode_allow false, headers only: SPIFFE id, Mcp-Method, Mcp-Name);
+# ext_proc to guard (buffered request and response bodies, failure_mode_allow false); then the
+# router.
+#
+# Clusters: gate and guard over mTLS with SVIDs from SPIRE over SDS; the tool services and the
+# model gateway. Nothing else resolves. If Envoy gives up after the ledger has committed, that
+# decision is recorded as decided, not executed, and reconciled nightly.

@@ -1,0 +1,22 @@
+# Build output and caches
+node_modules/
+dist/
+.nx/
+coverage/
+*.tsbuildinfo
+
+# Generated code: rebuilt by buf and the stub script on every build
+packages/contracts/src/gen/
+packages/contracts-py/src/lmp_contracts/gen/
+services/knowledge/src/adapters/outbound/antlr/generated/
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Local environment files never enter the repo
+.env
+.env.*

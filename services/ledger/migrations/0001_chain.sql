@@ -1,0 +1,2 @@
+-- decisions (append-only: the app role has no UPDATE or DELETE), chain_head with one row per
+-- chain, checkpoints.

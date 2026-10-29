@@ -1,0 +1,17 @@
+{
+  "name": "@lmp/sanitizer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "services/sanitizer/src",
+  "tags": ["type:service", "zone:raw", "lang:py"],
+  "targets": {
+    "lint": {
+      "command": "uv run ruff check services/sanitizer && uv run lint-imports --config services/sanitizer/pyproject.toml",
+      "cache": true
+    },
+    "test": {
+      "command": "uv run --package lmp-sanitizer pytest services/sanitizer/tests",
+      "cache": true
+    }
+  }
+}

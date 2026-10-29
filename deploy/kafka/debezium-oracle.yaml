@@ -1,0 +1,2 @@
+# Debezium's Oracle connector as a KafkaConnector: snapshot at a fixed SCN from a replica; change
+# capture switched on later.

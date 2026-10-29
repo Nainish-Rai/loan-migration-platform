@@ -1,0 +1,2 @@
+# Overrides for an air-gapped install: every image from Harbor, models only on vLLM, Ceph RGW
+# instead of S3, OpenBao transit instead of KMS.

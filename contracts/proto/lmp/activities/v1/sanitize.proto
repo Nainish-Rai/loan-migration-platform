@@ -1,0 +1,2 @@
+// Inputs and outputs of the sanitize activities, shared by the TypeScript workflow and the Python
+// worker.

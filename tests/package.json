@@ -1,0 +1,21 @@
+{
+  "name": "@lmp/tests",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "End-to-end and chaos tests across services.",
+  "scripts": {
+    "test:e2e": "vitest run e2e",
+    "test:chaos": "vitest run chaos"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "toxiproxy-node-client": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:tests",
+      "lang:ts"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "@lmp/testing",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic loan files, container presets and test fakes. Imported only by tests.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@testcontainers/kafka": "catalog:",
+    "@testcontainers/neo4j": "catalog:",
+    "@testcontainers/postgresql": "catalog:",
+    "fast-check": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:testing",
+      "lang:ts"
+    ]
+  }
+}

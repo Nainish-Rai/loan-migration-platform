@@ -1,0 +1,58 @@
+{
+  "name": "@lmp/verification",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Climbs the ladder on every record, L0 structure to L5 downstream feeds, and stores evidence that names the exact snapshot it checked.",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src",
+    "start": "node dist/main/main.js",
+    "migrate": "node-pg-migrate up --migrations-dir migrations"
+  },
+  "dependencies": {
+    "@lmp/shared-kernel": "workspace:*",
+    "@lmp/contracts": "workspace:*",
+    "@lmp/platform-node": "workspace:*",
+    "@lmp/platform-nest": "workspace:*",
+    "@bufbuild/protobuf": "catalog:",
+    "@connectrpc/connect": "catalog:",
+    "@connectrpc/connect-fastify": "catalog:",
+    "@connectrpc/connect-node": "catalog:",
+    "@duckdb/node-api": "catalog:",
+    "@modelcontextprotocol/server": "catalog:",
+    "@nestjs/common": "catalog:",
+    "@nestjs/core": "catalog:",
+    "@nestjs/platform-fastify": "catalog:",
+    "@opentelemetry/api": "catalog:",
+    "@temporalio/activity": "catalog:",
+    "@temporalio/client": "catalog:",
+    "@temporalio/worker": "catalog:",
+    "@temporalio/workflow": "catalog:",
+    "cockatiel": "catalog:",
+    "fastify": "catalog:",
+    "kysely": "catalog:",
+    "node-pg-migrate": "catalog:",
+    "pg": "catalog:",
+    "pino": "catalog:",
+    "reflect-metadata": "catalog:",
+    "rxjs": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@lmp/testing": "workspace:*",
+    "@nestjs/testing": "catalog:",
+    "@temporalio/testing": "catalog:",
+    "@testcontainers/postgresql": "catalog:",
+    "@types/pg": "catalog:",
+    "testcontainers": "catalog:"
+  },
+  "nx": {
+    "tags": [
+      "type:service",
+      "zone:control",
+      "lang:ts"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@lmp/shared-kernel",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The few domain types every context agrees on.",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "test": "vitest run --passWithNoTests",
+    "lint": "eslint src"
+  },
+  "nx": {
+    "tags": [
+      "type:kernel",
+      "lang:ts"
+    ]
+  }
+}

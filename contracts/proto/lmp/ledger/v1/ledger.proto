@@ -1,0 +1,2 @@
+// LedgerService: Append(DecisionRecord) returns Receipt; GetReceipt; VerifyRange. Field numbers
+// are never reused, and buf breaking guards that.
