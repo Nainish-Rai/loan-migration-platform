@@ -1,5 +1,6 @@
 # Loan migration platform
 
+> [!IMPORTANT]
 > **This is a design shell of sample files.** Every source file is a comment that says what goes there and what it may import. The manifests (`package.json`, `pyproject.toml`, `pnpm-workspace.yaml`) list each service's open-source libraries and versions. There is no implementation and no customer data.
 
 A platform that moves a 30-year-old bank's loan book (Oracle records, OnBase documents, loose PDFs and forms) into a new platform's database. AI agents do the first 80 percent of the mapping work, and people approve the rest. Every agent action passes one gate, and the gate writes the decision down before the action happens.
@@ -8,47 +9,42 @@ Start with [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), then [services/gate](se
 
 ## The system at a glance
 
-A loan file moves top to bottom, one trust zone at a time, and gets less raw at each step. Agents never touch a tool directly: every call goes through the gate, which writes it down first.
+A loan file moves through one trust zone at a time and gets less raw at each step. Agents never touch a tool directly: every call goes through the gate, which writes it down first.
 
-```text
-              Legacy bank: Oracle LOS, OnBase, loose PDFs
-                                   │  read-only, at one point in time
-                                   ▼
-╔═ RAW ══════════════════════════════════════════════════════════════════╗
-║  intake ─────────────────> sanitizer                                   ║
-║  lands every byte once      strips macros, masks identity numbers      ║
-╚══════════════════════════════════╤═════════════════════════════════════╝
-                                   │  masked files only
-                                   ▼
-╔═ MASKED ═══════════════════════════════════════════════════════════════╗
-║  docai ──────────────> knowledge <────────────── agents                ║
-║  pages and fields,      one graph of the         five narrow agents    ║
-║  each with a citation   evidence                 in a sandbox          ║
-╚══════════════════════════════════════════════════════╤═════════════════╝
-                                                       │  every agent action
-                                                       ▼
-╔═ GATE ═════════════════════════════════════════════════════════════════╗
-║  gate ───> ledger ───> broker         guard          model-gateway     ║
-║  decides   writes it   hands out a    screens every  Claude on Bedrock ║
-║            down first  300-second key tool result    or vLLM in-bank   ║
-╚══════════════════════════════════╤═════════════════════════════════════╝
-                                   │  only what the gate allowed and logged
-                                   ▼
-╔═ CONTROL ══════════════════════════════════════════════════════════════╗
-║  runs: one durable workflow per migration unit; waits for people       ║
-║                                                                        ║
-║  mapping ───> staging ───> verification ───> release                   ║
-║  specs and    a masked     every record,     a merge request           ║
-║  questions    copy per run L0 to L5          two people sign           ║
-╚══════════════════════════════════╤═════════════════════════════════════╝
-                                   │  signed releases
-                                   ▼
-╔═ PRODUCTION ═══════════════════════════════════════════════════════════╗
-║  cutover: moves applications by status in small cohorts (post-pilot)   ║
-╚══════════════════════════════════╤═════════════════════════════════════╝
-                                   │
-                                   ▼
-                    New platform: the loan database
+```
++------------------------ [ ONE LOAN FILE ] -------------------------+
+|                                                                    |
+| 1  Legacy bank                                                     |
+|    Oracle LOS, OnBase, loose PDFs.                                 |
+|    Read-only, at one point in time.                                |
+| │                                                                  |
+| 2  Raw zone: intake → sanitizer                                    |
+|    Lands every byte once, strips macros, masks identity numbers.   |
+|    Only masked files leave.                                        |
+| │                                                                  |
+| 3  Masked zone: docai → knowledge ← agents                         |
+|    Pages and fields, each with a citation.                         |
+|    One graph of the evidence. Five narrow agents in a sandbox.     |
+|    Every agent action goes to the gate.                            |
+| │                                                                  |
+| 4  Gate zone: gate → ledger → broker, then guard, model-gateway    |
+|    gate decides, ledger writes it down first, broker hands out a   |
+|    300-second key, guard screens every tool result.                |
+|    model-gateway reaches Claude on Bedrock, or vLLM in the bank.   |
+|    Only what the gate allowed and logged moves on.                 |
+| │                                                                  |
+| 5  Control zone: mapping → staging → verification → release        |
+|    runs holds one durable workflow per migration unit and waits    |
+|    for people. Specs and questions, a masked copy per run, every   |
+|    record checked L0 to L5, a merge request two people sign.       |
+| │                                                                  |
+| 6  Production zone: cutover                                        |
+|    Moves applications by status in small cohorts. After the pilot. |
+| │                                                                  |
+| 7  New platform                                                    |
+|    The loan database.                                              |
+|                                                                    |
++--------------------------------------------------------------------+
 ```
 
 ## Services
@@ -76,107 +72,87 @@ Twelve bounded contexts become fifteen services in five trust zones, plus an ado
 
 ## Inside one service
 
-Every TypeScript service has the same four rings: `src/domain`, `src/application` (use cases and the ports they own), `src/adapters` and `src/main`. Imports point inward. `.dependency-cruiser.cjs` and the Nx module boundaries in `eslint.config.mjs` fail CI on a wrong import; import-linter does the same for the Python services.
+Every TypeScript service has the same four rings: `src/domain`, `src/application` (use cases and the ports they own), `src/adapters` and `src/main`. Imports point inward: `main` → `adapters` → `application` → `domain`. `.dependency-cruiser.cjs` and the Nx module boundaries in `eslint.config.mjs` fail CI on a wrong import; import-linter does the same for the Python services.
 
-Here is [services/gate](services/gate), ring by ring:
+Here is [services/gate](services/gate), ring by ring, outermost first:
 
-```text
-┌─ main: wires it together and boots ──────────────────────────────────┐
-│  main.ts · gate.module.ts · config.ts                                │
-│  ┌─ adapters: the outside world ──────────────────────────────────┐  │
-│  │  inbound/  ext-authz (Envoy asks here) · http                  │  │
-│  │  outbound/ cedar · ledger · harbor · sigstore                  │  │
-│  │  ┌─ application: use cases and the ports they own ──────────┐  │  │
-│  │  │  decide-action · load-policy-bundle                      │  │  │
-│  │  │  ports/ policy-engine · decision-log · bundle-source     │  │  │
-│  │  │  ┌─ domain: pure rules, no frameworks ────────────────┐  │  │  │
-│  │  │  │  action · decision · deny-reason                   │  │  │  │
-│  │  │  │  policy-bundle · principal-chain                   │  │  │  │
-│  │  │  └────────────────────────────────────────────────────┘  │  │  │
-│  │  └──────────────────────────────────────────────────────────┘  │  │
-│  └────────────────────────────────────────────────────────────────┘  │
-└──────────────────────────────────────────────────────────────────────┘
-
-imports only point inward:  main ──> adapters ──> application ──> domain
-```
+| Ring                                         | Holds                            | In the gate                                                                                                          |
+| -------------------------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| [main](services/gate/src/main)               | Wires it together and boots      | `main.ts`, `gate.module.ts`, `config.ts`                                                                             |
+| [adapters](services/gate/src/adapters)       | The outside world                | Inbound: `ext-authz` (Envoy asks here), `http`. Outbound: `cedar`, `ledger`, `harbor`, `sigstore`                    |
+| [application](services/gate/src/application) | Use cases and the ports they own | `decide-action`, `load-policy-bundle`. Ports: `policy-engine`, `decision-log`, `bundle-source`, `signature-verifier` |
+| [domain](services/gate/src/domain)           | Pure rules, no frameworks        | `action`, `decision`, `deny-reason`, `policy-bundle`, `principal-chain`                                              |
 
 ## One agent call
 
-```mermaid
-sequenceDiagram
-  participant A as agents (gVisor sandbox)
-  participant E as Envoy sidecar
-  participant G as gate
-  participant L as ledger
-  participant T as tool (knowledge)
-  participant B as broker
-  participant Q as guard
-  A->>E: MCP call with Mcp-Method and Mcp-Name
-  E->>G: ext_authz Check (250 ms, fails closed)
-  G->>L: Append(decision) (150 ms)
-  L-->>G: receipt, once the standby has the write
-  G-->>E: OK
-  E->>T: the tool call, with the receipt
-  T->>B: ExchangeForGrant(SVID, receipt, scope)
-  B-->>T: a grant for at most 300 s
-  T-->>E: result
-  E->>Q: ext_proc screens the result
-  Q-->>E: redacted, or blocked
-  E-->>A: screened result
-```
+An agent runs in a gVisor sandbox with no credentials, so every tool call takes the same path:
 
-No record, no action: if the ledger can't write, the gate denies, Envoy returns 403 and the run pauses.
+1. The agent sends an MCP call, with `Mcp-Method` and `Mcp-Name`, to its Envoy sidecar.
+2. Envoy asks the gate with an `ext_authz` Check. It has 250 ms and fails closed.
+3. The gate appends the decision to the ledger, which has 150 ms.
+4. The ledger returns a receipt once the standby has the write, and the gate answers OK.
+5. Envoy makes the tool call to `knowledge`, with the receipt.
+6. The tool calls `ExchangeForGrant` on the broker with its SVID, the receipt and the scope, and gets a grant for at most 300 s.
+7. The tool returns its result, and Envoy sends it to guard through `ext_proc`. Guard returns it redacted, or blocks it.
+8. Envoy gives the agent the screened result.
+
+> [!IMPORTANT]
+> No record, no action: if the ledger can't write, the gate denies, Envoy returns 403 and the run pauses.
 
 ## Repository layout
 
-```text
-loan-migration-platform/
-├── services/                        # 15 services, one folder each
-│   ├── intake/  sanitizer/          # raw zone
-│   ├── docai/  knowledge/  agents/  # masked zone
-│   ├── gate/                        # gate zone; start here
-│   │   ├── src/
-│   │   │   ├── domain/              # pure rules
-│   │   │   ├── application/         # use cases + ports/
-│   │   │   ├── adapters/            # Envoy, Cedar, ledger
-│   │   │   └── main/                # wiring and boot
-│   │   ├── test/                    # unit, integration, contract
-│   │   ├── Dockerfile
-│   │   └── package.json             # its libraries
-│   ├── ledger/  broker/  guard/     # gate zone
-│   ├── runs/  mapping/  staging/    # control zone
-│   ├── verification/  release/      # control zone
-│   └── cutover/                     # production zone
-├── packages/                        # shared code
-│   ├── shared-kernel/               # ids, money, citation
-│   ├── contracts/  contracts-py/    # generated code
-│   ├── platform-node/               # logs, traces, Kafka, SPIFFE
-│   ├── platform-nest/               # NestJS glue
-│   └── testing/                     # containers, synthetic loans
-├── contracts/                       # every wire format
-│   ├── proto/lmp/                   # gRPC
-│   └── events/                      # Kafka events (AsyncAPI)
-├── policies/                        # Cedar, default deny
-│   ├── agents/                      # one file per agent
-│   └── guardrails/                  # rules for every agent
-├── jobs/                            # PySpark
-│   ├── parse/  profile/  resolve/
-│   ├── load/
-│   └── verify/                      # the L0-L5 ladder
-├── deploy/                          # runs inside the bank
-│   ├── helm/  k8s/  envoy/
-│   ├── spire/  openbao/  kafka/
-│   ├── temporal/  vllm/
-│   ├── model-gateway/
-│   ├── observability/  terraform/
-│   └── airgap/                      # the offline install
-├── tests/                           # tracer bullet, chaos
-├── tools/                           # service generator
-├── docs/                            # start with ARCHITECTURE.md
-│   └── adr/                         # 15 decisions
-├── pnpm-workspace.yaml              # the version catalog
-├── nx.json  biome.jsonc             # build and format
-└── pyproject.toml                   # Python workspace
+```
++------------------------- [ REPOSITORY ] --------------------------+
+|                                                                   |
+| loan-migration-platform/                                          |
+| ├─ services/                         15 services, one folder each |
+| │  ├─ intake/ sanitizer/             raw zone                     |
+| │  ├─ docai/ knowledge/ agents/      masked zone                  |
+| │  ├─ gate/                          gate zone; start here        |
+| │  │  ├─ src/                                                     |
+| │  │  │  ├─ domain/                  pure rules                   |
+| │  │  │  ├─ application/             use cases + ports/           |
+| │  │  │  ├─ adapters/                Envoy, Cedar, ledger         |
+| │  │  │  └─ main/                    wiring and boot              |
+| │  │  ├─ test/                       unit, integration, contract  |
+| │  │  ├─ Dockerfile                                               |
+| │  │  └─ package.json                its libraries                |
+| │  ├─ ledger/ broker/ guard/         gate zone                    |
+| │  ├─ runs/ mapping/ staging/        control zone                 |
+| │  ├─ verification/ release/         control zone                 |
+| │  └─ cutover/                       production zone              |
+| ├─ packages/                         shared code                  |
+| │  ├─ shared-kernel/                 ids, money, citation         |
+| │  ├─ contracts/ contracts-py/       generated code               |
+| │  ├─ platform-node/                 logs, traces, Kafka, SPIFFE  |
+| │  ├─ platform-nest/                 NestJS glue                  |
+| │  └─ testing/                       containers, synthetic loans  |
+| ├─ contracts/                        every wire format            |
+| │  ├─ proto/lmp/                     gRPC                         |
+| │  └─ events/                        Kafka events (AsyncAPI)      |
+| ├─ policies/                         Cedar, default deny          |
+| │  ├─ agents/                        one file per agent           |
+| │  └─ guardrails/                    rules for every agent        |
+| ├─ jobs/                             PySpark                      |
+| │  ├─ parse/ profile/ resolve/                                    |
+| │  ├─ load/                                                       |
+| │  └─ verify/                        the L0-L5 ladder             |
+| ├─ deploy/                           runs inside the bank         |
+| │  ├─ helm/ k8s/ envoy/                                           |
+| │  ├─ spire/ openbao/ kafka/                                      |
+| │  ├─ temporal/ vllm/                                             |
+| │  ├─ model-gateway/                                              |
+| │  ├─ observability/ terraform/                                   |
+| │  └─ airgap/                        the offline install          |
+| ├─ tests/                            tracer bullet, chaos         |
+| ├─ tools/                            service generator            |
+| ├─ docs/                             start with ARCHITECTURE.md   |
+| │  └─ adr/                           15 decisions                 |
+| ├─ pnpm-workspace.yaml               the version catalog          |
+| ├─ nx.json biome.jsonc               build and format             |
+| └─ pyproject.toml                    Python workspace             |
+|                                                                   |
++-------------------------------------------------------------------+
 ```
 
 ## Stack
